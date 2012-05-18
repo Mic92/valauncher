@@ -81,7 +81,7 @@ namespace VaLauncher {
 			if (filtered.size > 0) {
 				labels[index].use_markup = false;
 				labels[index].label = filtered[index];
-				if (index < filtered.size - 1) {
+				if (index < labels.size - 1) {
 					index++;
 				} else {
 					index = 0;
