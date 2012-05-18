@@ -4,7 +4,7 @@ VaLauncher
 Simple application launcher written in Vala
 -------------------------------------------
 
-Supports some kind of autocompletion and command history.
+It even supports some kind of autocompletion and command history.
 
 ### Dependecies:
 

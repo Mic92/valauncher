@@ -76,11 +76,11 @@ namespace VaLauncher {
 				string [] command;
 				Shell.parse_argv (entry.text, out command);
 				Process.spawn_async (null,
-									 command,
-									 null,
-									 SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.SEARCH_PATH,
-									 null,
-									 out pid);
+				                     command,
+				                     null,
+				                     SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.SEARCH_PATH,
+				                     null,
+				                     out pid);
 
 				hist.add_entry (entry.text);
 				hist.write_to_file ();
