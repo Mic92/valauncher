@@ -91,13 +91,16 @@ namespace VaLauncher {
 
 		private void run_command () {
 			try {
+				string pre_cmd = comp.get_first_complete ();
 				// open http url in browser
-				if (entry.text.has_prefix ("http://")) {
+				if (pre_cmd.has_prefix ("http://")) {
 					Process.spawn_command_line_async ("xdg-open " + entry.text);
 				} else { // try to run command
+					if (pre_cmd.has_prefix ("~/"))
+						pre_cmd = Environment.get_home_dir () + pre_cmd.substring (1);
 					Pid pid;
 					string [] command;
-					Shell.parse_argv (comp.get_first_complete (), out command);
+					Shell.parse_argv (pre_cmd, out command);
 					Process.spawn_async (null,
 					                     command,
 					                     null,
@@ -105,7 +108,7 @@ namespace VaLauncher {
 					                     null,
 					                     out pid);
 				}
-				hist.add_entry (comp.get_first_complete ());
+				hist.add_entry (pre_cmd);
 				hist.write_to_file ();
 				Gtk.main_quit ();
 			} catch (Error e) {
