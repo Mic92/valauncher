@@ -76,16 +76,20 @@ namespace VaLauncher {
 
 		private void run_command () {
 			try {
-				Pid pid;
-				string [] command;
-				Shell.parse_argv (entry.text, out command);
-				Process.spawn_async (null,
-				                     command,
-				                     null,
-				                     SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.SEARCH_PATH,
-				                     null,
-				                     out pid);
-
+				// open http url in browser
+				if (!comp.contains (entry.text) && entry.text.has_prefix ("http://")) {
+					Process.spawn_command_line_async ("xdg-open " + entry.text);
+				} else { // try to run command
+					Pid pid;
+					string [] command;
+					Shell.parse_argv (entry.text, out command);
+					Process.spawn_async (null,
+					                     command,
+					                     null,
+					                     SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.SEARCH_PATH,
+					                     null,
+					                     out pid);
+				}
 				hist.add_entry (entry.text);
 				hist.write_to_file ();
 				Gtk.main_quit ();

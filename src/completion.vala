@@ -66,5 +66,9 @@ namespace VaLauncher {
 				entry.select_region (prefix.length, -1);
 			}
 		}
+
+		public bool contains (string entry) {
+			return complist.contains (entry);
+		}
 	}
 }
