@@ -26,8 +26,7 @@ namespace VaLauncher {
 			entry.width_chars = 80;
 			entry.placeholder_text = "Enter application name here...";
 
-			comp = new Completion ();
-			entry.completion = comp;
+			comp = new Completion (entry);
 
 			button = new Button.from_stock (Gtk.Stock.EXECUTE);
 
@@ -42,6 +41,8 @@ namespace VaLauncher {
 
 		private void connect_signals () {
 			this.key_press_event.connect (on_key_pressed);
+			entry.changed.connect (comp.refill);
+			entry.move_cursor.connect (comp.refill);
 			button.clicked.connect (run_command);
 			this.destroy.connect (Gtk.main_quit);
 		}
@@ -62,6 +63,9 @@ namespace VaLauncher {
 				entry.text = hist.after (entry.text);
 				entry.select_region (0, -1);
 				break;
+			case "Tab":
+				comp.suggest_completion ();
+				return true;
 			default:
 				entry.secondary_icon_stock = null;
 				hist.to_end ();
