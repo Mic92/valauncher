@@ -7,6 +7,7 @@ namespace VaLauncher {
 		private Button button;
 		private Completion comp;
 		private History hist;
+		private Gtk.Box labels;
 
 		public VaLauncher () {
 			title = "valauncher";
@@ -26,7 +27,7 @@ namespace VaLauncher {
 			entry.width_chars = 80;
 			entry.placeholder_text = "Enter application name here...";
 
-			comp = new Completion (entry);
+
 
 			button = new Button.from_stock (Gtk.Stock.EXECUTE);
 
@@ -34,9 +35,23 @@ namespace VaLauncher {
 			hbox.add (entry);
 			hbox.add (button);
 
-			this.add (hbox);
+			var label_scroll = new Gtk.Layout ();
+			labels = new Gtk.Box (Orientation.HORIZONTAL, 5);
+			label_scroll.put (labels, 5, 5);
 
-			comp.fill_completion_list.begin ();
+			comp = new Completion (entry, labels);
+
+			var vbox = new Box (Orientation.VERTICAL, 5);
+			vbox.homogeneous = true;
+			vbox.add (hbox);
+			vbox.add (label_scroll);
+
+			this.add (vbox);
+
+			comp.fill_completion_list.begin ((obj, res) =>
+				{ comp.refill ();
+				  comp.fill_completion_list.end (res);
+				});
 		}
 
 		private void connect_signals () {
@@ -77,12 +92,12 @@ namespace VaLauncher {
 		private void run_command () {
 			try {
 				// open http url in browser
-				if (!comp.contains (entry.text) && entry.text.has_prefix ("http://")) {
+				if (entry.text.has_prefix ("http://")) {
 					Process.spawn_command_line_async ("xdg-open " + entry.text);
 				} else { // try to run command
 					Pid pid;
 					string [] command;
-					Shell.parse_argv (entry.text, out command);
+					Shell.parse_argv (comp.get_first_complete (), out command);
 					Process.spawn_async (null,
 					                     command,
 					                     null,
@@ -90,7 +105,7 @@ namespace VaLauncher {
 					                     null,
 					                     out pid);
 				}
-				hist.add_entry (entry.text);
+				hist.add_entry (comp.get_first_complete ());
 				hist.write_to_file ();
 				Gtk.main_quit ();
 			} catch (Error e) {
