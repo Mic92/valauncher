@@ -45,6 +45,15 @@ namespace VaLauncher {
 			}
 		}
 
+		public void run () {
+			fill_completion_list.begin ((obj, res) =>
+				{
+				  complist.sort ((a, b) => { return ((string)a).collate((string)b); });
+				  refill ();
+				  fill_completion_list.end (res);
+				});
+		}
+
 		public void refill () {
 			if (!inner_change) {
 				foreach (Gtk.Label lbl in labels) {
@@ -58,8 +67,6 @@ namespace VaLauncher {
 					if (s.has_prefix (prefix))
 						filtered.add (s);
 				}
-
-				filtered.sort ((a, b) => { return ((string)a).collate((string)b); });
 
 				for (int i = 0; i < filtered.size; i++) {
 					labels.add (new Gtk.Label (filtered[i]));

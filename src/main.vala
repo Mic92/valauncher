@@ -27,8 +27,6 @@ namespace VaLauncher {
 			entry.width_chars = 80;
 			entry.placeholder_text = "Enter application name here...";
 
-
-
 			button = new Button.from_stock (Gtk.Stock.EXECUTE);
 
 			var hbox = new Box (Orientation.HORIZONTAL, 5);
@@ -40,6 +38,7 @@ namespace VaLauncher {
 			label_scroll.put (labels, 5, 5);
 
 			comp = new Completion (entry, labels);
+			comp.run ();
 
 			var vbox = new Box (Orientation.VERTICAL, 5);
 			vbox.homogeneous = true;
@@ -47,11 +46,6 @@ namespace VaLauncher {
 			vbox.add (label_scroll);
 
 			this.add (vbox);
-
-			comp.fill_completion_list.begin ((obj, res) =>
-				{ comp.refill ();
-				  comp.fill_completion_list.end (res);
-				});
 		}
 
 		private void connect_signals () {
