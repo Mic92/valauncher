@@ -4,7 +4,9 @@ VaLauncher
 Simple application launcher written in Vala
 -------------------------------------------
 
-It even supports some kind of autocompletion and command history.
+Supports some kind of dmenu-like autocompletion and also command history.
+
+![valauncher's screenshot](http://i.imgur.com/SQdQQ.png "Screenshot")
 
 Use `Tab` to move forward through the completion list and `Shift+Tab` to move backward.
 
