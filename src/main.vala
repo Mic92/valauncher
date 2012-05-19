@@ -3,11 +3,13 @@ using Gdk;
 
 namespace VaLauncher {
 	public class VaLauncher : Gtk.Window {
-		private Entry entry;
-		private Button button;
+		private Gtk.Entry entry;
+		private Gtk.Button button;
 		private Completion comp;
 		private History hist;
 		private Gtk.Box labels;
+		// Scrollable area of labels
+		private Gtk.Layout label_scroll;
 
 		public VaLauncher () {
 			title = "valauncher";
@@ -33,7 +35,7 @@ namespace VaLauncher {
 			hbox.add (entry);
 			hbox.add (button);
 
-			var label_scroll = new Gtk.Layout ();
+			label_scroll = new Gtk.Layout ();
 			labels = new Gtk.Box (Orientation.HORIZONTAL, 5);
 			label_scroll.put (labels, 5, 5);
 
@@ -53,6 +55,7 @@ namespace VaLauncher {
 			entry.changed.connect (comp.refill);
 			entry.move_cursor.connect (comp.refill);
 			button.clicked.connect (run_command);
+			comp.label_selected.connect (scroll_labels_box);
 			this.destroy.connect (Gtk.main_quit);
 		}
 
@@ -108,6 +111,28 @@ namespace VaLauncher {
 			} catch (Error e) {
 				entry.secondary_icon_stock = Gtk.Stock.DIALOG_ERROR;
 				entry.secondary_icon_tooltip_text = e.message;
+			}
+		}
+
+		private void scroll_labels_box (int x, int width)
+		{
+			// temporary var to get widget's position and size
+			Gtk.Allocation tmp_alloc;
+
+			// width of scrollable area
+			label_scroll.get_allocation (out tmp_alloc);
+			var scrl_width = tmp_alloc.width;
+
+			// x of labels box
+			labels.get_allocation (out tmp_alloc);
+			var lbls_x = tmp_alloc.x;
+
+			// If label is outside the window, scroll to that position
+			if ((x + width) > scrl_width) {
+				label_scroll.move (labels, scrl_width+lbls_x-(x+width)-5, 5);
+			} else {
+				// Reset position
+				label_scroll.move (labels, 5, 5);
 			}
 		}
 

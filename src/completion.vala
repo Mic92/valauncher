@@ -46,8 +46,10 @@ namespace VaLauncher {
 		}
 
 		public void run () {
+			// start asynchronous filling
 			fill_completion_list.begin ((obj, res) =>
 				{
+				  // When filling is complete...
 				  complist.sort ((a, b) => { return ((string)a).collate((string)b); });
 				  refill ();
 				  fill_completion_list.end (res);
@@ -55,6 +57,7 @@ namespace VaLauncher {
 		}
 
 		public void refill () {
+			// To prevent updating prefix after "Tab"
 			if (!inner_change) {
 				foreach (Gtk.Label lbl in labels) {
 					labels_box.remove (lbl);
@@ -63,6 +66,7 @@ namespace VaLauncher {
 				labels.clear ();
 				index = 0;
 				prefix = entry.text;
+
 				foreach (string s in complist) {
 					if (s.has_prefix (prefix))
 						filtered.add (s);
@@ -71,14 +75,13 @@ namespace VaLauncher {
 				for (int i = 0; i < filtered.size; i++) {
 					labels.add (new Gtk.Label (filtered[i]));
 					labels_box.add (labels[i]);
-					if (i == 20)
+					if (i == 31) // Too much will hang application...
 						break;
 				}
 				labels_box.show_all ();
+				// Highlight first label
 				if (filtered.size > 0) {
-					labels[index].use_markup = true;
-					labels[index].set_markup (
-						"<span color=\"white\" bgcolor=\"blue\">" + filtered[index] + "</span>");
+					highlight_label (index);
 				}
 			}
 			inner_change = false;
@@ -86,8 +89,10 @@ namespace VaLauncher {
 
 		public void suggest_completion () {
 			if (filtered.size > 0) {
+				// Unhighlight previous label
 				labels[index].use_markup = false;
 				labels[index].label = filtered[index];
+				// Cycle scrolling
 				if (index < labels.size - 1) {
 					index++;
 				} else {
@@ -95,21 +100,35 @@ namespace VaLauncher {
 				}
 				inner_change = true;
 				entry.text = filtered [index];
+				// Select suggested text
 				entry.select_region (prefix.length, -1);
-				labels[index].use_markup = true;
-				labels[index].set_markup (
-					"<span color=\"white\" bgcolor=\"blue\">" + entry.text + "</span>");
+				// Highlight current label
+				highlight_label (index);
 			}
+		}
+
+		private void highlight_label (int index) {
+			labels[index].use_markup = true;
+			labels[index].set_markup (
+				"<span color=\"white\" bgcolor=\"blue\">" + filtered[index] + "</span>");
+			// Emit signal to update labels_box position.
+			Gtk.Allocation tmp_alloc;
+			labels[index].get_allocation (out tmp_alloc);
+			label_selected (tmp_alloc.x, tmp_alloc.width);
 		}
 
 		public bool contains (string entry) {
 			return complist.contains (entry);
 		}
 
+		// Gives ability to launch application without typing the whole name of it.
 		public string get_first_complete () {
 			if (!filtered.contains(entry.text) && filtered.size > 0)
 				return filtered[0];
 			return entry.text;
 		}
+
+		// Signall emitted when some of the labels get selected
+		public signal void label_selected (int x, int width);
 	}
 }
