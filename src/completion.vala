@@ -87,16 +87,24 @@ namespace VaLauncher {
 			inner_change = false;
 		}
 
-		public void suggest_completion () {
+		public void suggest_completion (bool forward) {
 			if (filtered.size > 0) {
 				// Unhighlight previous label
 				labels[index].use_markup = false;
 				labels[index].label = filtered[index];
 				// Cycle scrolling
-				if (index < labels.size - 1) {
-					index++;
+				if (forward) {
+					if (index < labels.size - 1) {
+						index++;
+					} else {
+						index = 0;
+					}
 				} else {
-					index = 0;
+					if (index > 0) {
+						index--;
+					} else {
+						index = labels.size - 1;
+					}
 				}
 				inner_change = true;
 				entry.text = filtered [index];

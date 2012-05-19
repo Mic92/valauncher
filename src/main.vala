@@ -76,7 +76,10 @@ namespace VaLauncher {
 				entry.select_region (0, -1);
 				break;
 			case "Tab":
-				comp.suggest_completion ();
+				comp.suggest_completion (true);
+				return true;
+			case "ISO_Left_Tab":
+				comp.suggest_completion (false);
 				return true;
 			default:
 				entry.secondary_icon_stock = null;
@@ -128,11 +131,12 @@ namespace VaLauncher {
 			var lbls_x = tmp_alloc.x;
 
 			// If label is outside the window, scroll to that position
-			if ((x + width) > scrl_width) {
+			if (x + width > scrl_width) {
+				// Move forward
 				label_scroll.move (labels, scrl_width+lbls_x-(x+width)-5, 5);
-			} else {
-				// Reset position
-				label_scroll.move (labels, 5, 5);
+			} else if (lbls_x < 0 && x < 0) {
+				// Move backward
+				label_scroll.move (labels, lbls_x-x+5, 5);
 			}
 		}
 
