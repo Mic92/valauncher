@@ -117,8 +117,16 @@ namespace VaLauncher {
 
 		private void highlight_label (int index) {
 			labels[index].use_markup = true;
+			var style = Gtk.rc_get_style(labels[index]);
+			Gdk.Color fg_color, bg_color;
+			if (!style.lookup_color("theme_selected_fg_color", out fg_color)) {
+				Gdk.Color.parse("white", out fg_color);
+			};
+			if (!style.lookup_color("theme_selected_bg_color", out bg_color)) {
+				Gdk.Color.parse("blue", out bg_color);
+			};
 			labels[index].set_markup (
-				"<span color=\"white\" bgcolor=\"blue\">" + filtered[index] + "</span>");
+				@"<span color=\"$(fg_color.to_string())\" bgcolor=\"$(bg_color.to_string())\">$(filtered[index])</span>");
 			// Emit signal to update labels_box position.
 			Gtk.Allocation tmp_alloc;
 			labels[index].get_allocation (out tmp_alloc);
