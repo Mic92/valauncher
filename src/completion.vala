@@ -3,7 +3,7 @@ using Gee;
 namespace VaLauncher {
 	public class Completion : Object {
 		private ArrayList <string> complist;
-		private LinkedList <string> filtered;
+		private ArrayList <string> filtered;
 		private string prefix;
 		private bool inner_change;
 		private Gtk.Entry entry;
@@ -15,13 +15,14 @@ namespace VaLauncher {
 		public Completion (Gtk.Entry entry, Gtk.Box lbox) {
 			this.entry = entry;
 			complist = new ArrayList <string> ();
-			filtered = new LinkedList <string> ();
+			filtered = new ArrayList <string> ();
 			labels = new LinkedList <Gtk.Label> ();
 			labels_box = lbox;
 		}
 
 		public async void fill_completion_list () {
 			string [] plist = Environment.get_variable ("PATH").split (":");
+			var compset = new HashSet <string> ();
 			foreach (string pdir in plist) {
 				var dir = File.new_for_path (pdir);
 				try {
@@ -36,13 +37,14 @@ namespace VaLauncher {
 						}
 						// append files to the list
 						foreach (var info in files) {
-							complist.add (info.get_name ());
+							compset.add (info.get_name ());
 						}
 					}
 				} catch (Error e) {
 					stderr.printf ("While parsing %s: %s\n", pdir, e.message);
 				}
 			}
+			complist.insert_all (0, compset);
 		}
 
 		public void run () {
