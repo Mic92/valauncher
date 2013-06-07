@@ -6,7 +6,7 @@ Simple application launcher written in Vala
 
 Supports some kind of dmenu-like autocompletion and also command history.
 
-![valauncher's screenshot](http://i.imgur.com/ZdfLwlF.png "Screenshot")
+![valauncher's screenshot](http://i.imgur.com/WQk0rAu.png "Screenshot")
 
 Use `Tab` to move forward through the completion list and `Shift+Tab` to move backward.
 
