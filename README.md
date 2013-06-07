@@ -1,14 +1,18 @@
 VaLauncher
 ==========
 
-Simple application launcher written in Vala
+A fast dmenu-like application launcher built upon gtk3
 -------------------------------------------
-
-Supports some kind of dmenu-like autocompletion and also command history.
 
 ![valauncher's screenshot](http://i.imgur.com/WQk0rAu.png "Screenshot")
 
 Use `Tab` to move forward through the completion list and `Shift+Tab` to move backward.
+
+*Features*:
+
+ * dmenu-like autocompletion 
+ * command history
+ * lightweight
 
 ### Getting the latest release
 
