@@ -23,3 +23,8 @@ Use `Tab` to move forward through the completion list and `Shift+Tab` to move ba
 	cmake ..
 	make
 	make install       # if you wish, or just ./src/valauncher
+
+### Contributors
+
+* Anton Lobashev <soulthreads@linuxoids.net> - original author
+* Jörg Thalheim
