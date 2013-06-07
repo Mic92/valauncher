@@ -9,13 +9,13 @@ vala_precompile (VALA_C
   main.vala
 PACKAGES
   gtk+-3.0
-  gee-1.0
+  gee-0.8
 OPTIONS
 --thread
 )
 
 find_package (PkgConfig)
-pkg_check_modules (DEPS REQUIRED gtk+-3.0 gee-1.0 gthread-2.0)
+pkg_check_modules (DEPS REQUIRED gtk+-3.0 gee-0.8 gthread-2.0)
 set (CFLAGS ${DEPS_CFLAGS}
   ${DEPS_CFLAGS_OTHER})
 set (LIB_PATHS ${DEPS_LIBRARY_DIRS})
