@@ -26,5 +26,5 @@ Use `Tab` to move forward through the completion list and `Shift+Tab` to move ba
 
 ### Contributors
 
-* Anton Lobashev <soulthreads@linuxoids.net> - original author
-* Jörg Thalheim
+* [Anton Lobashev](https://github.com/soulthreads) - original author
+* [Jörg Thalheim](https://github.com/Mic92)
