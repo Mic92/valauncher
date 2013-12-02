@@ -14,7 +14,7 @@ namespace VaLauncher {
 
 		public Completion (Gtk.Entry entry, Gtk.Box lbox) {
 			this.entry = entry;
-			compset = new TreeSet <string> ();
+			compset = new TreeSet <string> ((a, b) => { return ((string)a).collate((string)b); });
 			filtered = new ArrayList <string> ();
 			labels = new LinkedList <Gtk.Label> ();
 			labels_box = lbox;
@@ -49,9 +49,9 @@ namespace VaLauncher {
 			// start asynchronous filling
 			fill_completion_list.begin ((obj, res) =>
 				{
-				  // When filling is complete...
-				  refill ();
-				  fill_completion_list.end (res);
+					// When filling is complete...
+					refill ();
+					fill_completion_list.end (res);
 				});
 		}
 
@@ -66,17 +66,29 @@ namespace VaLauncher {
 				index = 0;
 				prefix = entry.text;
 
-				foreach (string s in compset) {
-					if (s.has_prefix (prefix))
+				int i = 0;
+				if (prefix == null || prefix.length == 0) {
+					foreach (string s in compset) {
 						filtered.add (s);
+						labels.add (new Gtk.Label (filtered[i]));
+						labels_box.add (labels[i]);
+						i++;
+						if (i == 31) // Too much will hang application...
+							break;
+					}
+				} else {
+					foreach (string s in compset.tail_set(prefix)) {
+						if (s.has_prefix (prefix)) {
+							filtered.add (s);
+							labels.add (new Gtk.Label (filtered[i]));
+							labels_box.add (labels[i]);
+							i++;
+							if (i == 31) // Too much will hang application...
+								break;
+						}
+					}
 				}
 
-				for (int i = 0; i < filtered.size; i++) {
-					labels.add (new Gtk.Label (filtered[i]));
-					labels_box.add (labels[i]);
-					if (i == 31) // Too much will hang application...
-						break;
-				}
 				labels_box.show_all ();
 				// Highlight first label
 				if (filtered.size > 0) {
