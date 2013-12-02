@@ -12,7 +12,7 @@ Use `Tab` to move forward through the completion list and `Shift+Tab` to move ba
 
  * dmenu-like autocompletion 
  * command history
- * lightweight
+ * lightweight and fast
 
 ### Getting the latest release
 

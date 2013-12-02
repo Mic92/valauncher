@@ -2,7 +2,7 @@ using Gee;
 
 namespace VaLauncher {
 	public class Completion : Object {
-		private ArrayList <string> complist;
+		private TreeSet <string> compset;
 		private ArrayList <string> filtered;
 		private string prefix;
 		private bool inner_change;
@@ -14,7 +14,7 @@ namespace VaLauncher {
 
 		public Completion (Gtk.Entry entry, Gtk.Box lbox) {
 			this.entry = entry;
-			complist = new ArrayList <string> ();
+			compset = new TreeSet <string> ();
 			filtered = new ArrayList <string> ();
 			labels = new LinkedList <Gtk.Label> ();
 			labels_box = lbox;
@@ -22,7 +22,6 @@ namespace VaLauncher {
 
 		public async void fill_completion_list () {
 			string [] plist = Environment.get_variable ("PATH").split (":");
-			var compset = new HashSet <string> ();
 			foreach (string pdir in plist) {
 				var dir = File.new_for_path (pdir);
 				try {
@@ -44,7 +43,6 @@ namespace VaLauncher {
 					stderr.printf ("While parsing %s: %s\n", pdir, e.message);
 				}
 			}
-			complist.insert_all (0, compset);
 		}
 
 		public void run () {
@@ -52,7 +50,6 @@ namespace VaLauncher {
 			fill_completion_list.begin ((obj, res) =>
 				{
 				  // When filling is complete...
-				  complist.sort ((a, b) => { return ((string)a).collate((string)b); });
 				  refill ();
 				  fill_completion_list.end (res);
 				});
@@ -69,7 +66,7 @@ namespace VaLauncher {
 				index = 0;
 				prefix = entry.text;
 
-				foreach (string s in complist) {
+				foreach (string s in compset) {
 					if (s.has_prefix (prefix))
 						filtered.add (s);
 				}
@@ -136,7 +133,7 @@ namespace VaLauncher {
 		}
 
 		public bool contains (string entry) {
-			return complist.contains (entry);
+			return compset.contains (entry);
 		}
 
 		// Gives ability to launch application without typing the whole name of it.
