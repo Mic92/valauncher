@@ -18,7 +18,7 @@ Use `Tab` to move forward through the completion list and `Shift+Tab` to move ba
 
 * Archlinux:
 
-	yaourt -S [valauncher-git](https://aur.archlinux.org/packages/valauncher-git/)
+  yaourt -S [valauncher-git](https://aur.archlinux.org/packages/valauncher-git/)
 
 Help us to add valauncher to more linux distributions!
 
@@ -33,15 +33,15 @@ Help us to add valauncher to more linux distributions!
 
 #### For Maintainer
 
-	cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .
-	make
-	make install
+  cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .
+  make
+  make install
 
 #### For Developers
 
-	cmake .
-	make
-	./src/valauncher
+  cmake .
+  make
+  ./src/valauncher
 
 ### Contributors
 
