@@ -93,20 +93,20 @@ namespace VaLauncher {
 			try {
 				string pre_cmd = comp.get_first_complete ();
 				// open http url in browser
-				if (pre_cmd.has_prefix ("http://")) {
-					Process.spawn_command_line_async ("xdg-open " + entry.text);
+				if (pre_cmd.has_prefix ("~/"))
+					pre_cmd = Environment.get_home_dir () + pre_cmd.substring (1);
+				if (pre_cmd.has_prefix ("http://") || pre_cmd.has_suffix("/")) {
+					Process.spawn_command_line_async ("xdg-open " + pre_cmd);
 				} else { // try to run command
-					if (pre_cmd.has_prefix ("~/"))
-						pre_cmd = Environment.get_home_dir () + pre_cmd.substring (1);
 					Pid pid;
 					string [] command;
 					Shell.parse_argv (pre_cmd, out command);
 					Process.spawn_async (null,
-					                     command,
-					                     null,
-					                     SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.SEARCH_PATH,
-					                     null,
-					                     out pid);
+															 command,
+															 null,
+															 SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.SEARCH_PATH,
+															 null,
+															 out pid);
 				}
 				hist.add_entry (pre_cmd);
 				hist.write_to_file ();
