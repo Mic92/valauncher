@@ -29,7 +29,7 @@ namespace VaLauncher {
       entry.width_chars = 80;
       entry.placeholder_text = "Enter application name here...";
 
-      button = new Button.from_stock (Gtk.Stock.EXECUTE);
+      button = new Button.from_icon_name ("system-run", Gtk.IconSize.SMALL_TOOLBAR);
 
       var hbox = new Box (Orientation.HORIZONTAL, 5);
       hbox.add (entry);
@@ -112,7 +112,7 @@ namespace VaLauncher {
         hist.write_to_file ();
         Gtk.main_quit ();
       } catch (Error e) {
-        entry.secondary_icon_stock = Gtk.Stock.DIALOG_ERROR;
+        entry.secondary_icon_name = "dialog-error";
         entry.secondary_icon_tooltip_text = e.message;
       }
     }
