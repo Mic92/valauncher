@@ -128,13 +128,13 @@ namespace VaLauncher {
 
     private void highlight_label (int index) {
       labels[index].use_markup = true;
-      var style = Gtk.rc_get_style(labels[index]);
-      Gdk.Color fg_color, bg_color;
+      var style = labels[index].get_style_context();
+      Gdk.RGBA fg_color, bg_color;
       if (!style.lookup_color("theme_selected_fg_color", out fg_color)) {
-        Gdk.Color.parse("white", out fg_color);
+        fg_color.parse("white");
       };
       if (!style.lookup_color("theme_selected_bg_color", out bg_color)) {
-        Gdk.Color.parse("blue", out bg_color);
+        bg_color.parse("blue");
       };
       labels[index].set_markup (
         @"<span color=\"$(fg_color.to_string())\" bgcolor=\"$(bg_color.to_string())\">$(filtered[index])</span>");
