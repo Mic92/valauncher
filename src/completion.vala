@@ -126,18 +126,30 @@ namespace VaLauncher {
       }
     }
 
+    private uint8 gdk_to_rgb (double gdk) {
+      return (uint8) (gdk.clamp(0.0, 1.0) * 255.0);
+    }
+
+    private string rgba_to_markup (Gdk.RGBA rgba) {
+      return "#%02x%02x%02x".printf(
+        gdk_to_rgb (rgba.red), gdk_to_rgb (rgba.green), gdk_to_rgb (rgba.blue));
+    }
+
     private void highlight_label (int index) {
       labels[index].use_markup = true;
       var style = labels[index].get_style_context();
       Gdk.RGBA fg_color, bg_color;
-      if (!style.lookup_color("theme_selected_fg_color", out fg_color)) {
-        fg_color.parse("white");
+      if (!style.lookup_color ("theme_selected_fg_color", out fg_color)) {
+        fg_color.parse ("white");
       };
-      if (!style.lookup_color("theme_selected_bg_color", out bg_color)) {
-        bg_color.parse("blue");
+      if (!style.lookup_color ("theme_selected_bg_color", out bg_color)) {
+        bg_color.parse ("blue");
       };
-      labels[index].set_markup (
-        @"<span color=\"$(fg_color.to_string())\" bgcolor=\"$(bg_color.to_string())\">$(filtered[index])</span>");
+      var fg_markup = rgba_to_markup (fg_color);
+      var bg_markup = rgba_to_markup (bg_color);
+      var markup = Markup.printf_escaped (@"<span foreground=\"$(fg_markup)\" background=\"$(bg_markup)\">%s</span>",
+                                          filtered[index]);
+      labels[index].set_markup (markup);
       // Emit signal to update labels_box position.
       Gtk.Allocation tmp_alloc;
       labels[index].get_allocation (out tmp_alloc);
