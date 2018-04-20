@@ -20,6 +20,10 @@ Use `Tab` to move forward through the completion list and `Shift+Tab` to move ba
 
 `$ yaourt -S` [valauncher-git](https://aur.archlinux.org/packages/valauncher-git/)
 
+* NixOS:
+
+`$ nix-env -i valauncher`
+
 Help us to add valauncher to more linux distributions!
 
 ### Dependencies:
