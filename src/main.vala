@@ -82,7 +82,7 @@ namespace VaLauncher {
         comp.suggest_completion (false);
         return true;
       default:
-        entry.secondary_icon_stock = null;
+        entry.secondary_icon_name = null;
         hist.to_end ();
         break;
       }
