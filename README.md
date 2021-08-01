@@ -18,7 +18,7 @@ Use `Tab` to move forward through the completion list and `Shift+Tab` to move ba
 
 * GTK+3
 * Vala
-* Libgee 0.10.x (for earlier versions simply revert 4ef8528abd6d5d9c971120b67abc9f37eef413cd)
+* Libgee
 * CMake
 
 ### Building:
